@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domotic Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo">🏠 Domotic</div>
+    <div class="menu" onclick="navigateTo('dashboard')"><i class="fa-solid fa-gauge"></i> Dashboard</div>
+    <div class="menu" onclick="navigateTo('devices')"><i class="fa-solid fa-lightbulb"></i> Devices</div>
+    <div class="menu" onclick="navigateTo('rooms')"><i class="fa-solid fa-door-open"></i> Rooms</div>
+    <div class="menu" onclick="navigateTo('energy')"><i class="fa-solid fa-bolt"></i> Energy</div>
+</div>
+
+<div class="main">
+    <div id="dashboard-page" class="page active">
+        <div class="header">
+            <h1>Good Morning, Bea! 🌤️</h1>
+            <button class="btn" onclick="openAddDeviceModal()"><i class="fa-solid fa-plus"></i> Add Device</button>
+        </div>
+        <div class="card-container">
+            <div class="card">
+                <h2><i class="fa-solid fa-lightbulb"></i> Lights</h2>
+                <div class="toggle" data-device="lights" onclick="toggleDevice(this, 'lights')">
+                    <div class="circle"></div>
+                </div>
+                <p class="status">Status: <span id="lights-status">OFF</span></p>
+            </div>
+            <div class="card">
+                <h2><i class="fa-solid fa-snowflake"></i> Air Conditioning</h2>
+                <div class="toggle" data-device="ac" onclick="toggleDevice(this, 'ac')">
+                    <div class="circle"></div>
+                </div>
+                <p class="status">Status: <span id="ac-status">OFF</span></p>
+            </div>
+            <div class="card">
+                <h2><i class="fa-solid fa-lock"></i> Front Door</h2>
+                <div class="toggle" data-device="door" onclick="toggleDevice(this, 'door')">
+                    <div class="circle"></div>
+                </div>
+                <p class="status">Status: <span id="door-status">LOCKED</span></p>
+            </div>
+            <div class="card">
+                <h2><i class="fa-solid fa-fan"></i> Fan</h2>
+                <div class="toggle" data-device="fan" onclick="toggleDevice(this, 'fan')">
+                    <div class="circle"></div>
+                </div>
+                <p class="status">Status: <span id="fan-status">OFF</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="devices-page" class="page">
+        <div class="header">
+            <h1>Devices Management</h1>
+            <button class="btn" onclick="openAddDeviceModal()"><i class="fa-solid fa-plus"></i> Add Device</button>
+        </div>
+        <table class="devices-table">
+            <thead>
+                <tr>
+                    <th>Device Name</th>
+                    <th>Type</th>
+                    <th>Room</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Lights</td>
+                    <td>Lighting</td>
+                    <td>Living Room</td>
+                    <td><span class="status-badge off">OFF</span></td>
+                    <td>
+                        <button class="btn-small" onclick="editDevice('lights')"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button class="btn-small delete" onclick="deleteDevice('lights')"><i class="fa-solid fa-trash"></i> Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="rooms-page" class="page">
+        <div class="header">
+            <h1>Rooms</h1>
+            <button class="btn" onclick="openAddRoomModal()"><i class="fa-solid fa-plus"></i> Add Room</button>
+        </div>
+        <div class="rooms-grid">
+            <div class="room-card">
+                <h3><i class="fa-solid fa-couch"></i> Living Room</h3>
+                <p>5 Devices</p>
+                <button class="btn-small" onclick="viewRoom('living-room')">View</button>
+            </div>
+            <div class="room-card">
+                <h3><i class="fa-solid fa-bed"></i> Bedroom</h3>
+                <p>3 Devices</p>
+                <button class="btn-small" onclick="viewRoom('bedroom')">View</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="energy-page" class="page">
+        <div class="header">
+            <h1>Energy Consumption</h1>
+        </div>
+        <div class="energy-stats">
+            <div class="stat-card">
+                <h3>Today's Usage</h3>
+                <p class="big-number">24.5 kWh</p>
+            </div>
+            <div class="stat-card">
+                <h3>This Month</h3>
+                <p class="big-number">486 kWh</p>
+            </div>
+            <div class="stat-card">
+                <h3>Cost</h3>
+                <p class="big-number">$145.80</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addDeviceModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAddDeviceModal()">&times;</span>
+        <h2>Add New Device</h2>
+        <form onsubmit="addDevice(event)">
+            <input type="text" id="deviceName" placeholder="Device Name" required>
+            <select id="deviceType" required>
+                <option>Select Type</option>
+                <option>Lighting</option>
+                <option>Climate</option>
+            </select>
+            <button type="submit" class="btn">Add Device</button>
+        </form>
+    </div>
+</div>
+
+<div id="addRoomModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAddRoomModal()">&times;</span>
+        <h2>Add New Room</h2>
+        <form onsubmit="addRoom(event)">
+            <input type="text" id="roomName" placeholder="Room Name" required>
+            <button type="submit" class="btn">Add Room</button>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
